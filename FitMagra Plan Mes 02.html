@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plan FitMagra - Juan Zaraza Mes 02</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #e2e8f0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 30px;
+            border-bottom: 3px solid #38bdf8;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            color: #38bdf8;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        
+        .header p {
+            font-size: 1.1em;
+            color: #cbd5e1;
+            margin-bottom: 5px;
+        }
+        
+        .header .date {
+            color: #38bdf8;
+            font-weight: bold;
+            font-size: 1em;
+        }
+        
+        .navigation {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .nav-btn {
+            padding: 12px 24px;
+            background: #38bdf8;
+            color: #0f172a;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            font-size: 1em;
+        }
+        
+        .nav-btn:hover {
+            background: #0284c7;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(56, 189, 248, 0.3);
+        }
+        
+        .nav-btn.active {
+            background: #0284c7;
+            box-shadow: 0 0 20px rgba(56, 189, 248, 0.5);
+        }
+        
+        .document {
+            display: none;
+            background: #1e293b;
+            border: 2px solid #38bdf8;
+            border-radius: 12px;
+            padding: 40px;
+            margin-bottom: 30px;
+            page-break-inside: avoid;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        .document.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .document h2 {
+            color: #38bdf8;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-bottom: 2px solid #38bdf8;
+            padding-bottom: 15px;
+        }
+        
+        .document h3 {
+            color: #38bdf8;
+            font-size: 1.3em;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            padding-left: 15px;
+            border-left: 4px solid #38bdf8;
+        }
+        
+        .projection-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: #0f172a;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .projection-table th {
+            background: #38bdf8;
+            color: #0f172a;
+            padding: 15px;
+            text-align: left;
+            font-weight: bold;
+        }
+        
+        .projection-table td {
+            padding: 15px;
+            border-bottom: 1px solid #334155;
+            color: #cbd5e1;
+        }
+        
+        .projection-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .projection-table tr:hover {
+            background: #1e293b;
+        }
+        
+        .weekly-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: #0f172a;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .weekly-table th {
+            background: #38bdf8;
+            color: #0f172a;
+            padding: 12px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+        
+        .weekly-table td {
+            padding: 12px;
+            border-bottom: 1px solid #334155;
+            text-align: center;
+            color: #cbd5e1;
+        }
+        
+        .weekly-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .meal-box {
+            background: #0f172a;
+            border-left: 4px solid #38bdf8;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 8px;
+            break-inside: avoid;
+        }
+        
+        .meal-box h4 {
+            color: #38bdf8;
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
+        
+        .meal-box ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .meal-box li {
+            padding: 8px 0;
+            color: #cbd5e1;
+            border-bottom: 1px solid #334155;
+            padding-left: 25px;
+            position: relative;
+        }
+        
+        .meal-box li:last-child {
+            border-bottom: none;
+        }
+        
+        .meal-box li:before {
+            content: "▸";
+            color: #38bdf8;
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+        }
+        
+        .exercise-day {
+            background: #0f172a;
+            border-left: 4px solid #38bdf8;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 8px;
+            break-inside: avoid;
+        }
+        
+        .exercise-day h4 {
+            color: #38bdf8;
+            font-size: 1.1em;
+            margin-bottom: 15px;
+        }
+        
+        .exercise-item {
+            padding: 12px 0;
+            border-bottom: 1px solid #334155;
+            padding-left: 25px;
+            position: relative;
+            color: #cbd5e1;
+            line-height: 1.6;
+        }
+        
+        .exercise-item:last-child {
+            border-bottom: none;
+        }
+        
+        .exercise-item.continue:before {
+            content: "✓";
+            color: #22c55e;
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+        
+        .exercise-item.new:before {
+            content: "🆕";
+            position: absolute;
+            left: 0;
+        }
+        
+        .supplement-box {
+            background: #0f172a;
+            border-left: 4px solid #38bdf8;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 8px;
+            break-inside: avoid;
+        }
+        
+        .supplement-box h4 {
+            color: #38bdf8;
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
+        
+        .supplement-box p {
+            color: #cbd5e1;
+            margin: 8px 0;
+            line-height: 1.6;
+        }
+        
+        .cheat-meal-box {
+            background: #0f172a;
+            border: 2px solid #f59e0b;
+            border-left: 4px solid #f59e0b;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 8px;
+            break-inside: avoid;
+        }
+        
+        .cheat-meal-box h4 {
+            color: #f59e0b;
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
+        
+        .cheat-meal-box p {
+            color: #cbd5e1;
+            margin: 8px 0;
+            line-height: 1.6;
+        }
+        
+        .calendar-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: #0f172a;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .calendar-table th {
+            background: #f59e0b;
+            color: #0f172a;
+            padding: 12px;
+            text-align: center;
+            font-weight: bold;
+        }
+        
+        .calendar-table td {
+            padding: 12px;
+            border-bottom: 1px solid #334155;
+            text-align: center;
+            color: #cbd5e1;
+        }
+        
+        .calendar-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .highlight {
+            color: #38bdf8;
+            font-weight: bold;
+        }
+        
+        .print-btn {
+            display: block;
+            margin: 30px auto;
+            padding: 15px 40px;
+            background: #22c55e;
+            color: #0f172a;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1.1em;
+            transition: all 0.3s ease;
+        }
+        
+        .print-btn:hover {
+            background: #16a34a;
+            transform: scale(1.05);
+        }
+        
+        @media print {
+            body {
+                background: white;
+                color: #000;
+            }
+            
+            .header {
+                border-bottom: 2px solid #000;
+            }
+            
+            .navigation {
+                display: none;
+            }
+            
+            .print-btn {
+                display: none;
+            }
+            
+            .document {
+                display: block !important;
+                background: white;
+                border: 1px solid #000;
+                page-break-after: always;
+                box-shadow: none;
+                padding: 30px;
+            }
+            
+            .document h2 {
+                color: #000;
+                border-bottom: 2px solid #000;
+            }
+            
+            .document h3 {
+                color: #000;
+                border-left: 4px solid #000;
+            }
+            
+            .projection-table th {
+                background: #ccc;
+                color: #000;
+            }
+            
+            .projection-table td {
+                border-bottom: 1px solid #000;
+                color: #000;
+            }
+            
+            .meal-box, .exercise-day, .supplement-box, .cheat-meal-box {
+                background: #f9f9f9;
+                border-color: #000;
+                color: #000;
+            }
+            
+            .meal-box h4, .exercise-day h4, .supplement-box h4, .cheat-meal-box h4 {
+                color: #000;
+            }
+            
+            .meal-box li, .exercise-item, .supplement-box p, .cheat-meal-box p {
+                color: #000;
+            }
+            
+            .meal-box li:before, .exercise-item.continue:before {
+                color: #000;
+            }
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #64748b;
+            border-top: 1px solid #334155;
+            margin-top: 40px;
+            font-size: 0.9em;
+        }
+        
+        .stat-card {
+            background: #0f172a;
+            border: 1px solid #38bdf8;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .stat-card .value {
+            color: #38bdf8;
+            font-size: 1.8em;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        
+        .stat-card .label {
+            color: #cbd5e1;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>💪 FitMagra Systems 💪</h1>
+            <p>Plan Personalizado de Hipertrofia y Performance</p>
+            <p><strong>Cliente:</strong> Juan Zaraza</p>
+            <p><strong>Mes:</strong> 02 | <span class="date">Ciclo: 30 ENE - 01 MAR 2026</span></p>
+        </div>
+        
+        <div class="navigation">
+            <button class="nav-btn active" onclick="showDocument('kilocalograma')">📊 Kilocalograma</button>
+            <button class="nav-btn" onclick="showDocument('nutricion')">🥗 Nutrición</button>
+            <button class="nav-btn" onclick="showDocument('entrenamiento')">🏋️ Entrenamiento</button>
+            <button class="nav-btn" onclick="showDocument('suplementos')">💊 Suplementos</button>
+            <button class="nav-btn" onclick="showDocument('cheatmeals')">🍕 Cheat Meals</button>
+        </div>
+        
+        <!-- DOCUMENTO 1: KILOCALOGRAMA -->
+        <div id="kilocalograma" class="document active">
+            <h2>📊 Kilocalograma - Juan Zaraza - Mes 02</h2>
+            
+            <div style="background: #0f172a; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+                <h3 style="margin-top: 0;">📈 Proyección de Ganancia Mes 02</h3>
+                <table class="projection-table">
+                    <thead>
+                        <tr>
+                            <th>Métrica</th>
+                            <th>Mes 01</th>
+                            <th>Mes 02 (Proyectado)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Peso inicial</td>
+                            <td>66.0 kg</td>
+                            <td>67.8 kg</td>
+                        </tr>
+                        <tr>
+                            <td>Peso final</td>
+                            <td>67.8 kg</td>
+                            <td><span class="highlight">69.6 kg</span></td>
+                        </tr>
+                        <tr>
+                            <td>Ganancia total</td>
+                            <td>+1.8 kg</td>
+                            <td><span class="highlight">+1.8 kg</span></td>
+                        </tr>
+                        <tr>
+                            <td>TMB (Reposo)</td>
+                            <td>1.634 kcal</td>
+                            <td>1.675 kcal</td>
+                        </tr>
+                        <tr>
+                            <td>GETD (Actividad)</td>
+                            <td>2.124 kcal</td>
+                            <td>2.165 kcal</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <h3>⚙️ Estructura Calórica Semanal</h3>
+            <table class="weekly-table">
+                <thead>
+                    <tr>
+                        <th>Día</th>
+                        <th>Ciclo</th>
+                        <th>Trabajo</th>
+                        <th>Kcal</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Lunes</td>
+                        <td>Día 1</td>
+                        <td>Tren Superior</td>
+                        <td><span class="highlight">2.366</span></td>
+                        <td>Superávit Básico (+201)</td>
+                    </tr>
+                    <tr>
+                        <td>Martes</td>
+                        <td>Día 2</td>
+                        <td>Tren Inferior</td>
+                        <td><span class="highlight">2.566</span></td>
+                        <td>Superávit Moderado (+401)</td>
+                    </tr>
+                    <tr>
+                        <td>Miércoles</td>
+                        <td>Día 3</td>
+                        <td>Rest</td>
+                        <td>2.165</td>
+                        <td>Homeostasis (0)</td>
+                    </tr>
+                    <tr>
+                        <td>Jueves</td>
+                        <td>Día 1</td>
+                        <td>Tren Superior</td>
+                        <td><span class="highlight">2.366</span></td>
+                        <td>Superávit Básico (+201)</td>
+                    </tr>
+                    <tr>
+                        <td>Viernes</td>
+                        <td>Día 2</td>
+                        <td>Tren Inferior</td>
+                        <td><span class="highlight">2.566</span></td>
+                        <td>Superávit Moderado (+401)</td>
+                    </tr>
+                    <tr>
+                        <td>Sábado</td>
+                        <td>Día 3</td>
+                        <td>Rest</td>
+                        <td>2.165</td>
+                        <td>Homeostasis (0)</td>
+                    </tr>
+                    <tr>
+                        <td>Domingo</td>
+                        <td>Día 3</td>
+                        <td>Rest</td>
+                        <td>2.165</td>
+                        <td>Homeostasis (0)</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px;">
+                <div class="stat-card">
+                    <div class="label">Total Semanal</div>
+                    <div class="value">16.373 kcal</div>
+                </div>
+                <div class="stat-card">
+                    <div class="label">Promedio Diario</div>
+                    <div class="value">2.339 kcal</div>
+                </div>
+            </div>
+            
+            <div style="background: #0f172a; padding: 15px; border-radius: 8px; margin-top: 20px; border-left: 4px solid #38bdf8;">
+                <p style="color: #cbd5e1; margin: 0;"><strong>💡 Estrategia:</strong> Ciclado de objetivos - Días 1 y 2: Ganancia muscular | Días 3: Recuperación</p>
+            </div>
+            
+            <div style="background: #0f172a; padding: 15px; border-radius: 8px; margin-top: 10px; border-left: 4px solid #38bdf8;">
+                <p style="color: #cbd5e1; margin: 0;"><strong>📅 Fecha de corte:</strong> 30 de cada mes | <strong>Hidratación:</strong> 3.000 ml diarios</p>
+            </div>
+            
+            <button class="print-btn" onclick="window.print()">🖨️ Imprimir Esta Página</button>
+        </div>
+        
+        <!-- DOCUMENTO 2: NUTRICIÓN -->
+        <div id="nutricion" class="document">
+            <h2>🥗 Estrategia Nutricional - Mes 02</h2>
+            <p style="color: #cbd5e1; margin-bottom: 20px; font-style: italic;">Sistema FLEXIBLE por ciclos (Día 1, 2, 3) | Fecha de corte: 30 de cada mes</p>
+            
+            <div style="background: #f59e0b; color: #0f172a; padding: 12px; border-radius: 8px; margin-bottom: 20px; font-weight: bold;">
+                ⚠️ No seguir días fijos (lunes/martes). Ejecuta el ciclo numerado según tu disponibilidad.
+            </div>
+            
+            <h3>🥚 Día 1 (Tren Superior) - 2.366 kcal</h3>
+            <div class="meal-box">
+                <ul>
+                    <li>Comida 1: 3 huevos enteros + avena 60gr + té verde</li>
+                    <li>Post-Entreno: 1 scoop Megacarbs 25gr</li>
+                    <li>Comida 3: 200gr pechuga asada o 3 perniles</li>
+                    <li>Comida 4: 1 banano</li>
+                    <li>Comida 5: 200gr pechuga + 150gr arroz blanco</li>
+                    <li>Post-entreno: 1 scoop CreaStack</li>
+                    <li>Antes dormir: 10gr pistachos + 1 té verde</li>
+                </ul>
+            </div>
+            
+            <h3>🥩 Día 2 (Tren Inferior) - 2.566 kcal</h3>
+            <div class="meal-box">
+                <ul>
+                    <li>Comida 1: 2 wraps carne molida + tocineta + pavo</li>
+                    <li>Post-Entreno: 1 scoop Megacarbs 25gr</li>
+                    <li>Comida 3: 300gr carne molida (80/20)</li>
+                    <li>Comida 4: 100gr arroz + 3 claras 1 yema</li>
+                    <li>Comida 5: 200gr arroz + 150gr pechuga/tilapia</li>
+                    <li>Post-entreno: 1 scoop CreaStack</li>
+                    <li>Antes dormir: 10gr pistachos + 1 té negro</li>
+                </ul>
+            </div>
+            
+            <h3>🍝 Día 3 (Rest/Recuperación) - 2.165 kcal</h3>
+            <div class="meal-box">
+                <ul>
+                    <li>Desayuno: Pancake avena (50gr avena + 2 huevos)</li>
+                    <li>Almuerzo: 2 pan pita hamburguesa casera</li>
+                    <li>Entrada: 250gr churrasco molido adobado</li>
+                    <li>Opcional: 300gr espaguetti ó 5 papas ó 400gr arroz</li>
+                    <li>Fruta: 10 fresas medianas + 1 rodaja piña</li>
+                    <li>Snack: 20gr frutos secos + 1 yogurt</li>
+                    <li>Antes dormir: Verdura libre + té</li>
+                </ul>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px;">
+                <div class="stat-card">
+                    <div class="label">Hidratación Diaria</div>
+                    <div class="value">3.000 ml</div>
+                </div>
+                <div class="stat-card">
+                    <div class="label">Frutas Aliadas</div>
+                    <div class="value">Manzana, Kiwi, Piña</div>
+                </div>
+            </div>
+            
+            <div style="background: #0f172a; padding: 15px; border-radius: 8px; margin-top: 20px; border-left: 4px solid #38bdf8;">
+                <p style="color: #cbd5e1; margin: 0;"><strong>📌 Restricciones:</strong> NO azúcares refinados, harinas, lácteos, frutas altas en fructosa</p>
+            </div>
+            
+            <button class="print-btn" onclick="window.print()">🖨️ Imprimir Esta Página</button>
+        </div>
+        
+        <!-- DOCUMENTO 3: ENTRENAMIENTO -->
+        <div id="entrenamiento" class="document">
+            <h2>🏋️ Sistemas de Entrenamiento IA - Mes 02</h2>
+            <p style="color: #cbd5e1; margin-bottom: 20px;">Hipertrofia + Rendimiento Natación + Estabilizadores | Meta: +9 kg en 12 semanas</p>
+            
+            <div style="background: #f59e0b; color: #0f172a; padding: 12px; border-radius: 8px; margin-bottom: 20px; font-weight: bold;">
+                ✅ CONTINÚA = Ejercicios del Mes 01 | 🆕 AGREGADO = Nuevos Estabilizadores
+            </div>
+            
+            <h3>📍 Día 1: Tren Superior + Antebrazos</h3>
+            <div class="exercise-day">
+                <h4>Estructura y Ejercicios</h4>
+                <div class="exercise-item continue">Press de banca: 4+1 series (5-8 + 8-12 reps) | RIR 2-3</div>
+                <div class="exercise-item continue">Press inclinado: 3×8-12 | RIR 2-3</div>
+                <div class="exercise-item continue">Aperturas: 2×12-15 | RIR 2-3</div>
+                <div class="exercise-item continue">Curls barra: 2×8-12 | RIR 2-3</div>
+                <div class="exercise-item continue">Flexión tríceps: 2×12-15 | RIR 1-2</div>
+                <div class="exercise-item new">Farmer's Carry: 3×30-40 seg | Grip + Antebrazos</div>
+                <div class="exercise-item new">Wrist Curls: 3×12-15 reps | Flexores muñeca</div>
+                <div class="exercise-item new">Reverse Barbell Curl: 3×10-12 reps | Pronación + Braquiorradial</div>
+                <div class="exercise-item continue">Dead Bug: 2×12-15 | RIR máximo</div>
+            </div>
+            
+            <h3>📍 Día 2: Tren Inferior + Pantorrillas + Abdomen</h3>
+            <div class="exercise-day">
+                <h4>Estructura y Ejercicios</h4>
+                <div class="exercise-item continue">Sentadilla: 4+1 series (5-8 + 8-12 reps) | RIR 2-3</div>
+                <div class="exercise-item continue">Peso muerto rumano: 3×8-12 | RIR 2-3</div>
+                <div class="exercise-item continue">Sentadilla búlgara: 3×8-12 c/pierna | RIR 2-3</div>
+                <div class="exercise-item continue">Flexión piernas: 3×10-15 | RIR 2-3</div>
+                <div class="exercise-item continue">Empuje cadera: 3×8-12 | RIR 2-3</div>
+                <div class="exercise-item new">Calf Raises: 3×15-20 reps | Pantorrillas</div>
+                <div class="exercise-item new">Ab Wheel Rollouts: 3×8-12 | RIR 1-2 | Core profundo</div>
+                <div class="exercise-item continue">Press Pallof: 3×10-12 c/lado | RIR 2</div>
+            </div>
+            
+            <h3>📍 Día 3: Tracción Dorsal + Hombros (Natación)</h3>
+            <div class="exercise-day">
+                <h4>Estructura y Ejercicios</h4>
+                <div class="exercise-item continue">Dominadas/Pulldown: 4×5-10 | RIR 2-3</div>
+                <div class="exercise-item continue">Remo barra: 4×6-10 | RIR 2</div>
+                <div class="exercise-item continue">Jalones cara: 4×12-15 | RIR 1-2</div>
+                <div class="exercise-item continue">Jalón lateral supino: 2×10-12 | RIR 2-3</div>
+                <div class="exercise-item continue">Pectoral invertido: 3×12-15 | RIR 2-3</div>
+                <div class="exercise-item new">Lateral Raises: 3×12-15 reps | Deltoides medios</div>
+                <div class="exercise-item continue">Dead Bug: 2×15 | Control respiratorio</div>
+            </div>
+            
+            <h3>📍 Día 4: Piernas + Core + Cadena Posterior</h3>
+            <div class="exercise-day">
+                <h4>Estructura y Ejercicios</h4>
+                <div class="exercise-item continue">Peso muerto trampa: 3+1 (5-8 + 8-10) | RIR 2-3</div>
+                <div class="exercise-item continue">Curl nórdico: 3×6-10 | RIR 1-2</div>
+                <div class="exercise-item continue">RDL una pierna: 2×8-12 c/uno | RIR 2-3</div>
+                <div class="exercise-item continue">Extensión piernas: 2×12-15 | RIR 2-3</div>
+                <div class="exercise-item continue">Rotación minas: 3×10-12 c/lado | RIR 1-2</div>
+                <div class="exercise-item new">Calf Raises: 3×15-20 reps | Pantorrillas</div>
+                <div class="exercise-item continue">Press Pallof: 2×10-12 c/lado | RIR 2</div>
+            </div>
+            
+            <div style="background: #0f172a; padding: 15px; border-radius: 8px; margin-top: 20px; border-left: 4px solid #38bdf8;">
+                <h4 style="color: #38bdf8; margin-top: 0;">📈 Progresión (Semanas 1-12)</h4>
+                <p style="color: #cbd5e1; margin: 5px 0;">• Semanas 1-3: Volumen moderado (RIR 2-3) | • Semana 4: DESCARGA (-15%)</p>
+                <p style="color: #cbd5e1; margin: 5px 0;">• Semanas 5-7: +2-5 lbs en compuestos | • Semana 8: DESCARGA (-15%)</p>
+                <p style="color: #cbd5e1; margin: 5px 0;">• Semanas 9-11: Mayor intensidad (RIR 1-2) | • Semana 12: TEST MÁXIMO (RIR 0-1)</p>
+            </div>
+            
+            <button class="print-btn" onclick="window.print()">🖨️ Imprimir Esta Página</button>
+        </div>
+        
+        <!-- DOCUMENTO 4: SUPLEMENTOS -->
+        <div id="suplementos" class="document">
+            <h2>💊 Suplementación Simplificada - Mes 02</h2>
+            <p style="color: #cbd5e1; margin-bottom: 20px;">Solo 3 productos (máxima eficiencia) | Fecha de corte: 30 de cada mes</p>
+            
+            <div style="background: #22c55e; color: #0f172a; padding: 12px; border-radius: 8px; margin-bottom: 20px; font-weight: bold;">
+                ✅ Simplificación: 3 suplementos de calidad > 10 de dudosa adherencia
+            </div>
+            
+            <h3>1️⃣ CreaStack</h3>
+            <div class="supplement-box">
+                <h4>CreaStack</h4>
+                <p><strong>📌 Función:</strong> Reclutamiento motor, ATP, energía</p>
+                <p><strong>📋 Dosificación:</strong> 1-2 scoops diarios</p>
+                <p><strong>⏰ Momento:</strong> Preferentemente pre/durante entreno</p>
+                <p><strong>💰 Beneficio:</strong> Aumento de performance muscular</p>
+                <p><strong>✓ Estado:</strong> MANTENER (Mes 01 - Mes 02)</p>
+            </div>
+            
+            <h3>2️⃣ MegaCarbs</h3>
+            <div class="supplement-box">
+                <h4>MegaCarbs</h4>
+                <p><strong>📌 Función:</strong> Recuperación glucídica post-entrenamiento</p>
+                <p><strong>📋 Dosificación:</strong> 1 scoop (25gr) × 2 veces/semana</p>
+                <p style="padding-left: 20px; margin-top: -5px;">→ 1 scoop post-Tren Superior (Día 1)<br/>→ 1 scoop post-Tren Inferior (Día 2)</p>
+                <p><strong>⏰ Momento:</strong> Inmediatamente post-entreno (ventana 30 min)</p>
+                <p><strong>💰 Beneficio:</strong> Síntesis proteica + recuperación</p>
+                <p><strong>✓ Estado:</strong> MANTENER (Mes 01 - Mes 02)</p>
+            </div>
+            
+            <h3>3️⃣ WellFlex - Healthy America ⭐ NUEVO</h3>
+            <div class="supplement-box">
+                <h4>WellFlex (Healthy America)</h4>
+                <p><strong>📌 Función:</strong> Protección + recuperación de hombros</p>
+                <p><strong>🎯 Indicación:</strong> Lesión histórica de hombros (prevención)</p>
+                <p><strong>📋 Dosificación:</strong> Según indicaciones del fabricante</p>
+                <p><strong>⏰ Momento:</strong> Según indicaciones del envase</p>
+                <p><strong>💰 Beneficio:</strong> Salud articular, manguito rotador, estabilidad</p>
+                <p><strong>🆕 Inicio:</strong> Mes 02 - Continuidad</p>
+            </div>
+            
+            <div style="background: #0f172a; padding: 15px; border-radius: 8px; margin-top: 20px; border-left: 4px solid #38bdf8;">
+                <h4 style="color: #38bdf8; margin-top: 0;">❌ Cambios Respecto a Mes 01</h4>
+                <p style="color: #cbd5e1; margin: 5px 0;"><strong>Eliminados:</strong> Ashwagandha, Rhodiola, Panax Ginseng, Animal Pak, Cordyceps, Beta-alanina, Fosfatidilserina+Omega-3, Magnesio, Glicina</p>
+                <p style="color: #cbd5e1; margin: 5px 0;"><strong>Razón:</strong> Enfoque en lo ESENCIAL - Menor complejidad = Mayor adherencia</p>
+            </div>
+            
+            <button class="print-btn" onclick="window.print()">🖨️ Imprimir Esta Página</button>
+        </div>
+        
+        <!-- DOCUMENTO 5: CHEAT MEALS -->
+        <div id="cheatmeals" class="document">
+            <h2>🍕 Cheat Meals - Mes 02 (1 por Semana)</h2>
+            <p style="color: #cbd5e1; margin-bottom: 20px;">Coincidiendo con TREN INFERIOR para máximo aprovecho | Fecha de corte: 30 de cada mes</p>
+            
+            <div style="background: #f59e0b; color: #0f172a; padding: 12px; border-radius: 8px; margin-bottom: 20px; font-weight: bold;">
+                📍 ESTRATEGIA: Reset metabólico + aprovechamiento calórico en demanda máxima
+            </div>
+            
+            <h3>🗓️ Calendario de Cheat Meals</h3>
+            <table class="calendar-table">
+                <thead>
+                    <tr>
+                        <th>Semana</th>
+                        <th>Fecha</th>
+                        <th>Día</th>
+                        <th>Opción Recomendada</th>
+                        <th>Momento</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td><span class="highlight">30 ENE 2026</span></td>
+                        <td>Viernes</td>
+                        <td>🍕 Pizza XL (8 slices)</td>
+                        <td>POST-Tren Inferior</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td><span class="highlight">06 FEB 2026</span></td>
+                        <td>Viernes</td>
+                        <td>🍔 Hamburguesa Artesanal</td>
+                        <td>POST-Tren Inferior</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td><span class="highlight">13 FEB 2026</span></td>
+                        <td>Viernes</td>
+                        <td>🌽 Mazorcada con Queso</td>
+                        <td>POST-Tren Inferior</td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td><span class="highlight">20 FEB 2026</span></td>
+                        <td>Viernes</td>
+                        <td>🍦 Helado Gourmet</td>
+                        <td>POST-Tren Inferior</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <h3>🍽️ Opciones de Cheat Meals</h3>
+            <div class="cheat-meal-box">
+                <h4>🍕 Pizza XL (8 slices con carnes variadas)</h4>
+                <p>Aprovecha la demanda calórica post-Tren Inferior. Elige base integral o tradicional según preferencia.</p>
+            </div>
+            
+            <div class="cheat-meal-box">
+                <h4>🍔 Hamburguesa Artesanal (150-200gr carne)</h4>
+                <p>Pan blanco o moreno, queso, aderezos al gusto. Máxima satisfacción con objetivo estratégico.</p>
+            </div>
+            
+            <div class="cheat-meal-box">
+                <h4>🌽 Mazorcada con Queso y Aderezos</h4>
+                <p>Carbos complejos + proteína láctea + sabor colombiano. Excelente para este tipo de reset metabólico.</p>
+            </div>
+            
+            <div class="cheat-meal-box">
+                <h4>🍦 Helado Gourmet (aprox. 300-400gr)</h4>
+                <p>Cremas, chocolate, frutos. Suavidad y carbos simples para máxima recuperación post-entreno.</p>
+            </div>
+            
+            <h3>🔬 Ciencia Detrás de Cheat Meals</h3>
+            <div style="background: #0f172a; padding: 15px; border-radius: 8px; margin-top: 20px; border-left: 4px solid #38bdf8;">
+                <p style="color: #cbd5e1; margin: 5px 0;">✓ <strong>Reset leptina:</strong> Previene estancamiento metabólico</p>
+                <p style="color: #cbd5e1; margin: 5px 0;">✓ <strong>Ventana anabólica:</strong> Post-entreno = máxima síntesis proteica</p>
+                <p style="color: #cbd5e1; margin: 5px 0;">✓ <strong>Demanda calórica:</strong> Tren inferior requiere +400 kcal extra</p>
+                <p style="color: #cbd5e1; margin: 5px 0;">✓ <strong>Adherencia:</strong> 1/semana permite rigidez 6/7 días</p>
+                <p style="color: #cbd5e1; margin: 5px 0;">✓ <strong>Sostenibilidad:</strong> Psicológico para largo plazo</p>
+            </div>
+            
+            <div style="background: #0f172a; padding: 15px; border-radius: 8px; margin-top: 20px; border-left: 4px solid #f59e0b;">
+                <h4 style="color: #f59e0b; margin-top: 0;">⚠️ Consideraciones</h4>
+                <p style="color: #cbd5e1; margin: 5px 0;">• Comer POST-ENTRENO (mejora ubicación calórica)</p>
+                <p style="color: #cbd5e1; margin: 5px 0;">• NO repetir la misma opción 2 semanas consecutivas</p>
+                <p style="color: #cbd5e1; margin: 5px 0;">• Disfrutar SIN CULPA (es parte de la estrategia)</p>
+                <p style="color: #cbd5e1; margin: 5px 0;">• Día siguiente: Volver a plan normal (Día 1, 2 o 3)</p>
+            </div>
+            
+            <button class="print-btn" onclick="window.print()">🖨️ Imprimir Esta Página</button>
+        </div>
+        
+        <div class="footer">
+            <p>FitMagra Systems © 2026 | Plan Personalizado - Creado con Inteligencia Artificial</p>
+            <p>Para consultas o ajustes: fitmagrasystems@gmail.com | +57 316-575-4416</p>
+            <p style="margin-top: 15px; font-size: 0.85em; color: #475569;">💡 Tip: Usa los botones de navegación para ver cada documento. Imprime desde el botón 🖨️ Imprimir Esta Página en cada sección.</p>
+        </div>
+    </div>
+    
+    <script>
+        function showDocument(docId) {
+            // Hide all documents
+            const documents = document.querySelectorAll('.document');
+            documents.forEach(doc => doc.classList.remove('active'));
+            
+            // Remove active class from all buttons
+            const buttons = document.querySelectorAll('.nav-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            
+            // Show selected document
+            document.getElementById(docId).classList.add('active');
+            
+            // Add active class to clicked button
+            event.target.classList.add('active');
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+    </script>
+</body>
+</html>
